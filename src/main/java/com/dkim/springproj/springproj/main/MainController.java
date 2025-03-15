@@ -1,13 +1,13 @@
 package com.dkim.springproj.springproj.main;
 
 import org.springframework.web.bind.annotation.RestController;
-import com.dkim.springproj.springproj.main.dto.ResponseDto;
+import com.dkim.springproj.springproj.main.dto.MessageDto;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @RestController
 public class MainController {
   @GetMapping("/")
-  public ResponseDto Main() {
-    return new ResponseDto("hello, world!");
+  public MessageDto Main() {
+    return new MessageDto("hello, world!");
   }
 }

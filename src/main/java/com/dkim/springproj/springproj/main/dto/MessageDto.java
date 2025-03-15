@@ -1,9 +1,9 @@
 package com.dkim.springproj.springproj.main.dto;
 
-public class ResponseDto {
+public class MessageDto {
   String message;
 
-  public ResponseDto(String message) {
+  public MessageDto(String message) {
     this.message = message;
   }
 
