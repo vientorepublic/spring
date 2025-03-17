@@ -1,14 +1,20 @@
 package com.dkim.springproj.springproj.main.dto;
 
 public class ErrorDto {
+  private String timestamp;
   private Number status;
   private String error;
   private String message;
 
-  public ErrorDto(Number status, String error, String message) {
+  public ErrorDto(String timestamp, Number status, String error, String message) {
+    this.timestamp = timestamp;
     this.status = status;
     this.error = error;
     this.message = message;
+  }
+
+  public String getTimestamp() {
+    return this.timestamp;
   }
 
   public Number getStatus() {
