@@ -2,11 +2,12 @@ package com.dkim.springproj.springproj.main.handler;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 import com.dkim.springproj.springproj.main.dto.ErrorDto;
-import com.dkim.springproj.springproj.main.exception.EmptyParamException;
+import com.dkim.springproj.springproj.main.exception.InvalidParamException;
 import com.dkim.springproj.springproj.main.utility.Utility;
 
 @ControllerAdvice
@@ -20,10 +21,17 @@ public class GlobalExceptionHandler {
     return ResponseEntity.status(HttpStatus.NOT_FOUND).body(res);
   }
 
-  @ExceptionHandler(EmptyParamException.class)
-  private ResponseEntity<ErrorDto> BadRequestException() {
+  @ExceptionHandler(MissingServletRequestParameterException.class)
+  private ResponseEntity<ErrorDto> RequestParamException(MissingServletRequestParameterException ex) {
     String now = this.utility.getISOTimestamp();
-    ErrorDto res = new ErrorDto(now, 400, "Bad Request", "필수 입력값이 누락되었습니다.");
+    ErrorDto res = new ErrorDto(now, 400, "Bad Request", "필수 인자가 누락되었습니다.");
+    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(res);
+  }
+
+  @ExceptionHandler(InvalidParamException.class)
+  private ResponseEntity<ErrorDto> BadRequestException(InvalidParamException ex) {
+    String now = this.utility.getISOTimestamp();
+    ErrorDto res = new ErrorDto(now, 400, "Bad Request", ex.getMessage());
     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(res);
   }
 }
