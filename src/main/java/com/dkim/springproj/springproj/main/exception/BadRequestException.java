@@ -1,9 +1,9 @@
 package com.dkim.springproj.springproj.main.exception;
 
-public class InvalidParamException extends RuntimeException {
+public class BadRequestException extends RuntimeException {
   private String message;
 
-  public InvalidParamException(String message) {
+  public BadRequestException(String message) {
     super(message);
     this.message = message;
   }

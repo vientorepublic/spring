@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 import com.dkim.springproj.springproj.main.dto.ErrorDto;
-import com.dkim.springproj.springproj.main.exception.InvalidParamException;
+import com.dkim.springproj.springproj.main.exception.BadRequestException;
 import com.dkim.springproj.springproj.main.utility.Utility;
 
 @ControllerAdvice
@@ -28,8 +28,8 @@ public class GlobalExceptionHandler {
     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(res);
   }
 
-  @ExceptionHandler(InvalidParamException.class)
-  private ResponseEntity<ErrorDto> BadRequestException(InvalidParamException ex) {
+  @ExceptionHandler(BadRequestException.class)
+  private ResponseEntity<ErrorDto> BadRequestException(BadRequestException ex) {
     String now = this.utility.getISOTimestamp();
     ErrorDto res = new ErrorDto(now, 400, "Bad Request", ex.getMessage());
     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(res);

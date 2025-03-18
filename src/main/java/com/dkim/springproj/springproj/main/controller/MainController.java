@@ -8,15 +8,19 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
 public class MainController {
-  private MainService mainService = new MainService();
+  private final MainService mainService;
+
+  public MainController(MainService mainService) {
+    this.mainService = mainService;
+  }
 
   @GetMapping("/")
   public MessageDto Main() {
-    return this.mainService.Main();
+    return mainService.Main();
   }
 
   @GetMapping("/test")
   public MessageDto TestRequestParam(@RequestParam String name) {
-    return this.mainService.TestRequestParam(name);
+    return mainService.TestRequestParam(name);
   }
 }
