@@ -1,12 +1,11 @@
 package com.dkim.springproj.springproj.main.controller;
 
-import java.util.List;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.dkim.springproj.springproj.main.entity.User;
 import com.dkim.springproj.springproj.main.service.UserService;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -24,13 +23,8 @@ public class UserController {
     return userService.saveUser(user);
   }
 
-  @GetMapping
-  public List<User> getAllUsers() {
-    return userService.getAllUsers();
-  }
-
-  @GetMapping("/{name}")
-  public User getUserByName(@PathVariable String name) {
+  @GetMapping("/findUser")
+  public User getUserByName(@RequestParam String name) {
     return userService.getUserByName(name);
   }
 }
