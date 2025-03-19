@@ -15,6 +15,7 @@ import com.dkim.springproj.springproj.main.utility.Utility;
 public class GlobalExceptionHandler {
   private final Utility utility = new Utility();
 
+  // Global Not Found Exception
   @ExceptionHandler(NoResourceFoundException.class)
   private ResponseEntity<ErrorDto> NotFoundException() {
     String now = utility.getISOTimestamp();
@@ -22,6 +23,7 @@ public class GlobalExceptionHandler {
     return ResponseEntity.status(HttpStatus.NOT_FOUND).body(res);
   }
 
+  // Global Missing Request Parmeter Exception
   @ExceptionHandler(MissingServletRequestParameterException.class)
   private ResponseEntity<ErrorDto> RequestParamException(MissingServletRequestParameterException ex) {
     String now = utility.getISOTimestamp();
@@ -29,6 +31,7 @@ public class GlobalExceptionHandler {
     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(res);
   }
 
+  // Custom Not Found Exception
   @ExceptionHandler(NotFoundException.class)
   private ResponseEntity<ErrorDto> NotFoundException(NotFoundException ex) {
     String now = utility.getISOTimestamp();
@@ -36,6 +39,7 @@ public class GlobalExceptionHandler {
     return ResponseEntity.status(HttpStatus.NOT_FOUND).body(res);
   }
 
+  // Custom Bad Request Exception
   @ExceptionHandler(BadRequestException.class)
   private ResponseEntity<ErrorDto> BadRequestException(BadRequestException ex) {
     String now = utility.getISOTimestamp();

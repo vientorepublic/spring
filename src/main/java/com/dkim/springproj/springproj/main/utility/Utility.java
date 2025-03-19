@@ -7,10 +7,11 @@ import java.util.TimeZone;
 
 public class Utility {
   public String getISOTimestamp() {
-    TimeZone tz = TimeZone.getTimeZone("UTC");
+    TimeZone tz = TimeZone.getTimeZone("Asia/Seoul");
     DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
     df.setTimeZone(tz);
-    String timestamp = df.format(new Date());
+    Date now = new Date();
+    String timestamp = df.format(now);
     return timestamp;
   }
 }
