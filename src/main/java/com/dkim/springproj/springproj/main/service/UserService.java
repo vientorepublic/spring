@@ -27,7 +27,7 @@ public class UserService {
     if (id.length() == 0) {
       throw new BadRequestException("필수 인자가 비어있습니다.");
     }
-    User result = userRepository.findByName(id);
+    User result = userRepository.findByUserId(id);
     if (result == null) {
       throw new NotFoundException("해당 사용자를 찾을 수 없습니다.");
     }

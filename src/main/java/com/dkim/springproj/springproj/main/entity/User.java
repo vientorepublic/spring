@@ -1,5 +1,8 @@
 package com.dkim.springproj.springproj.main.entity;
 
+import java.util.Date;
+import org.hibernate.annotations.CreationTimestamp;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -11,8 +14,18 @@ public class User {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  private String name;
+  @Column(nullable = false)
+  private String userId;
+
+  @Column(nullable = false)
   private String email;
+
+  @Column(nullable = false)
+  private String password;
+
+  @Column(nullable = false, updatable = false)
+  @CreationTimestamp
+  private Date timestamp;
 
   public Long getId() {
     return id;
@@ -22,12 +35,12 @@ public class User {
     this.id = id;
   }
 
-  public String getName() {
-    return name;
+  public String getUserId() {
+    return userId;
   }
 
-  public void setName(String name) {
-    this.name = name;
+  public void setUserId(String userId) {
+    this.userId = userId;
   }
 
   public String getEmail() {
@@ -36,5 +49,17 @@ public class User {
 
   public void setEmail(String email) {
     this.email = email;
+  }
+
+  public String getPassword() {
+    return password;
+  }
+
+  public void setPassword(String password) {
+    this.password = password;
+  }
+
+  public Date getCreationTimestamp() {
+    return timestamp;
   }
 }
