@@ -1,7 +1,7 @@
 package com.dkim.springproj.springproj.main.dto;
 
 public class MessageDto {
-  String message;
+  private String message;
 
   public MessageDto(String message) {
     this.message = message;

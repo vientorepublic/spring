@@ -5,4 +5,6 @@ import com.dkim.springproj.springproj.main.entity.User;
 
 public interface UserRepository extends JpaRepository<User, Long> {
   User findByUserId(String userId);
+
+  User findByEmail(String email);
 }

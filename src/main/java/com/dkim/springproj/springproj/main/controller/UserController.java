@@ -3,6 +3,8 @@ package com.dkim.springproj.springproj.main.controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import com.dkim.springproj.springproj.main.dto.LoginBodyDto;
+import com.dkim.springproj.springproj.main.dto.MessageDto;
 import com.dkim.springproj.springproj.main.entity.User;
 import com.dkim.springproj.springproj.main.service.UserService;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,9 +20,14 @@ public class UserController {
     this.userService = userService;
   }
 
+  @PostMapping("/login")
+  public MessageDto mockLogin(@RequestBody LoginBodyDto body) {
+    return userService.mockLogin(body);
+  }
+
   @PostMapping("/addUser")
   public User addUser(@RequestBody User user) {
-    return userService.saveUser(user);
+    return userService.createUser(user);
   }
 
   @GetMapping("/findUser")

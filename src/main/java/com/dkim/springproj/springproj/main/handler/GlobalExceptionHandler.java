@@ -9,6 +9,7 @@ import org.springframework.web.servlet.resource.NoResourceFoundException;
 import com.dkim.springproj.springproj.main.dto.ErrorDto;
 import com.dkim.springproj.springproj.main.exception.BadRequestException;
 import com.dkim.springproj.springproj.main.exception.NotFoundException;
+import com.dkim.springproj.springproj.main.exception.UnauthorizedException;
 import com.dkim.springproj.springproj.main.utility.Utility;
 
 @ControllerAdvice
@@ -17,7 +18,7 @@ public class GlobalExceptionHandler {
 
   // Global Not Found Exception
   @ExceptionHandler(NoResourceFoundException.class)
-  private ResponseEntity<ErrorDto> NotFoundException() {
+  private ResponseEntity<ErrorDto> GlobalNotFoundException() {
     String now = utility.getISOTimestamp();
     ErrorDto res = new ErrorDto(now, 404, "Not Found", "요청하신 주소를 찾을 수 없습니다.");
     return ResponseEntity.status(HttpStatus.NOT_FOUND).body(res);
@@ -33,7 +34,7 @@ public class GlobalExceptionHandler {
 
   // Custom Not Found Exception
   @ExceptionHandler(NotFoundException.class)
-  private ResponseEntity<ErrorDto> NotFoundException(NotFoundException ex) {
+  private ResponseEntity<ErrorDto> CustomNotFoundException(NotFoundException ex) {
     String now = utility.getISOTimestamp();
     ErrorDto res = new ErrorDto(now, 404, "Not Found", ex.getMessage());
     return ResponseEntity.status(HttpStatus.NOT_FOUND).body(res);
@@ -45,5 +46,13 @@ public class GlobalExceptionHandler {
     String now = utility.getISOTimestamp();
     ErrorDto res = new ErrorDto(now, 400, "Bad Request", ex.getMessage());
     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(res);
+  }
+
+  // Custom Unauthorized Exception
+  @ExceptionHandler(UnauthorizedException.class)
+  private ResponseEntity<ErrorDto> UnauthorizedException(UnauthorizedException ex) {
+    String now = utility.getISOTimestamp();
+    ErrorDto res = new ErrorDto(now, 401, "Unauthorized", ex.getMessage());
+    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(res);
   }
 }
