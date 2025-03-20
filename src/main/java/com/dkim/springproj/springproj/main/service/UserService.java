@@ -10,32 +10,40 @@ import com.dkim.springproj.springproj.main.exception.NotFoundException;
 import com.dkim.springproj.springproj.main.exception.UnauthorizedException;
 import com.dkim.springproj.springproj.main.repository.UserRepository;
 import com.dkim.springproj.springproj.main.utility.BCrypt;
+import com.dkim.springproj.springproj.main.utility.Utility;
 
 @Service
 public class UserService {
   private final UserRepository userRepository;
+  private final Utility utility;
   private final BCrypt bcrypt;
 
   public UserService(UserRepository userRepository) {
     this.userRepository = userRepository;
+    this.utility = new Utility();
     this.bcrypt = new BCrypt();
   }
 
-  public User createUser(User user) {
-    String id = user.getUserId();
+  public MessageDto createUser(User user) {
+    String userId = user.getUserId();
     String email = user.getEmail();
-    User checkId = userRepository.findByUserId(id);
-    if (checkId != null) {
+    boolean isValidEmail = utility.isEmail(email);
+    if (!isValidEmail) {
+      throw new BadRequestException("올바른 이메일 주소를 입력해주세요.");
+    }
+    boolean isUserIdExist = userRepository.existsByUserId(userId);
+    if (isUserIdExist) {
       throw new BadRequestException("아이디가 이미 사용중입니다.");
     }
-    User checkEmail = userRepository.findByEmail(email);
-    if (checkEmail != null) {
+    boolean isEmailExist = userRepository.existsByEmail(email);
+    if (isEmailExist) {
       throw new BadRequestException("이메일 주소가 이미 사용중입니다.");
     }
     String plainPassword = user.getPassword();
     String hash = bcrypt.hash(plainPassword);
     user.setPassword(hash);
-    return userRepository.save(user);
+    userRepository.save(user);
+    return new MessageDto("회원가입이 완료되었습니다.");
   }
 
   public List<User> getAllUsers() {
@@ -43,9 +51,9 @@ public class UserService {
   }
 
   public MessageDto mockLogin(LoginBodyDto body) {
-    String id = body.getId();
+    String userId = body.getUserId();
     String password = body.getPassword();
-    User user = userRepository.findByUserId(id);
+    User user = userRepository.findByUserId(userId);
     if (user == null) {
       throw new UnauthorizedException("아이디 또는 비밀번호가 틀렸습니다.");
     }

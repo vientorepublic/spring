@@ -7,20 +7,29 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
-@Entity
+@Entity(name = "users")
 public class User {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(nullable = false, updatable = false)
   private Long id;
 
   @Column(nullable = false)
+  @NotNull
+  @NotBlank
   private String userId;
 
   @Column(nullable = false)
+  @NotNull
+  @NotBlank
   private String email;
 
   @Column(nullable = false)
+  @NotNull
+  @NotBlank
   private String password;
 
   @Column(nullable = false, updatable = false)

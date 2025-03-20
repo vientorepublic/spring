@@ -1,12 +1,12 @@
 package com.dkim.springproj.springproj.main.dto;
 
-public class ErrorDto {
+public class ExceptionDto {
   private String timestamp;
   private Number status;
   private String error;
   private String message;
 
-  public ErrorDto(String timestamp, Number status, String error, String message) {
+  public ExceptionDto(String timestamp, Number status, String error, String message) {
     this.timestamp = timestamp;
     this.status = status;
     this.error = error;

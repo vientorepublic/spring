@@ -14,4 +14,8 @@ public class Utility {
     String timestamp = df.format(now);
     return timestamp;
   }
+
+  public boolean isEmail(String email) {
+    return email.matches("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$");
+  }
 }

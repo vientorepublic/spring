@@ -10,6 +10,7 @@ import com.dkim.springproj.springproj.main.service.UserService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/users")
@@ -21,13 +22,13 @@ public class UserController {
   }
 
   @PostMapping("/login")
-  public MessageDto mockLogin(@RequestBody LoginBodyDto body) {
+  public MessageDto mockLogin(@RequestBody @Valid LoginBodyDto body) {
     return userService.mockLogin(body);
   }
 
-  @PostMapping("/addUser")
-  public User addUser(@RequestBody User user) {
-    return userService.createUser(user);
+  @PostMapping("/register")
+  public MessageDto addUser(@RequestBody @Valid User body) {
+    return userService.createUser(body);
   }
 
   @GetMapping("/findUser")

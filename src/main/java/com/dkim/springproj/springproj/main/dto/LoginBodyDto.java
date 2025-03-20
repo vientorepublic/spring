@@ -1,16 +1,24 @@
 package com.dkim.springproj.springproj.main.dto;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
 public class LoginBodyDto {
-  private String id;
+  @NotNull
+  @NotBlank
+  private String userId;
+
+  @NotNull
+  @NotBlank
   private String password;
 
-  public LoginBodyDto(String id, String password) {
-    this.id = id;
+  public LoginBodyDto(String userId, String password) {
+    this.userId = userId;
     this.password = password;
   }
 
-  public String getId() {
-    return this.id;
+  public String getUserId() {
+    return this.userId;
   }
 
   public String getPassword() {
