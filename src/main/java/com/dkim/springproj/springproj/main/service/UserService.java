@@ -1,7 +1,6 @@
 package com.dkim.springproj.springproj.main.service;
 
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import com.dkim.springproj.springproj.main.dto.AuthRequestDto;
@@ -69,7 +68,8 @@ public class UserService {
       throw new UnauthorizedException("아이디 또는 비밀번호가 틀렸습니다.");
     }
     String token = new JwtUtility().sign(secretKey, userId);
-    return new AuthResponseDto(String.format("환영합니다, %s님!", userId), token);
+    String message = String.format("환영합니다, %s님!", userId);
+    return new AuthResponseDto(message, token);
   }
 
   public User getUserByID(String id) {

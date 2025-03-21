@@ -27,12 +27,8 @@ public class JwtUtility {
   }
 
   public Claims decodeToken(String secret, String token) {
-    // if (!token.startsWith("Bearer")) {
-    // return false;
-    // }
-    byte[] decodedSecret = Base64.getDecoder().decode(secret);
     JwtParser jwtSubject = Jwts.parserBuilder()
-        .setSigningKey(decodedSecret)
+        .setSigningKey(secret.getBytes())
         .build();
     return jwtSubject.parseClaimsJws(token).getBody();
   }

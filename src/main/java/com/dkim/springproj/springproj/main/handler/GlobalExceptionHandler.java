@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import com.dkim.springproj.springproj.main.dto.ExceptionDto;
 import com.dkim.springproj.springproj.main.exception.BadRequestException;
+import com.dkim.springproj.springproj.main.exception.InternalServerException;
 import com.dkim.springproj.springproj.main.exception.NotFoundException;
 import com.dkim.springproj.springproj.main.exception.UnauthorizedException;
 import com.dkim.springproj.springproj.main.utility.Utility;
@@ -65,5 +66,12 @@ public class GlobalExceptionHandler {
     String now = utility.getISOTimestamp();
     ExceptionDto res = new ExceptionDto(now, 401, "Unauthorized", "잘못된 토큰입니다.");
     return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(res);
+  }
+
+  @ExceptionHandler(InternalServerException.class)
+  private ResponseEntity<ExceptionDto> InternalServerException(InternalServerException ex) {
+    String now = utility.getISOTimestamp();
+    ExceptionDto res = new ExceptionDto(now, 500, "Internal Server Error", ex.getMessage());
+    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(res);
   }
 }

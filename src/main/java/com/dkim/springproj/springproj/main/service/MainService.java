@@ -8,4 +8,8 @@ public class MainService {
   public MessageDto Main() {
     return new MessageDto("Hello, World!");
   }
+
+  public MessageDto Auth() {
+    return new MessageDto("Test Auth Page");
+  }
 }
