@@ -14,6 +14,7 @@ public class WebConfig implements WebMvcConfigurer {
   }
 
   @Override
+  @SuppressWarnings("null")
   public void addInterceptors(InterceptorRegistry registry) {
     registry.addInterceptor(headerInterceptor)
         .addPathPatterns("/**");
