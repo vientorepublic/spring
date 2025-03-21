@@ -3,7 +3,7 @@ package com.dkim.springproj.springproj.main.controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import com.dkim.springproj.springproj.main.dto.LoginBodyDto;
+import com.dkim.springproj.springproj.main.dto.AuthRequestDto;
 import com.dkim.springproj.springproj.main.dto.MessageDto;
 import com.dkim.springproj.springproj.main.entity.User;
 import com.dkim.springproj.springproj.main.service.UserService;
@@ -22,8 +22,8 @@ public class UserController {
   }
 
   @PostMapping("/login")
-  public MessageDto mockLogin(@RequestBody @Valid LoginBodyDto body) {
-    return userService.mockLogin(body);
+  public MessageDto mockLogin(@RequestBody @Valid AuthRequestDto body) {
+    return userService.Login(body);
   }
 
   @PostMapping("/register")

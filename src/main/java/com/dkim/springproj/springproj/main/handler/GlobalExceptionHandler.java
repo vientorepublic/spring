@@ -12,12 +12,12 @@ import com.dkim.springproj.springproj.main.exception.BadRequestException;
 import com.dkim.springproj.springproj.main.exception.NotFoundException;
 import com.dkim.springproj.springproj.main.exception.UnauthorizedException;
 import com.dkim.springproj.springproj.main.utility.Utility;
+import io.jsonwebtoken.security.SignatureException;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
   private final Utility utility = new Utility();
 
-  // Global Missing Request Parmeter Exception
   @ExceptionHandler(MissingServletRequestParameterException.class)
   private ResponseEntity<ExceptionDto> RequestParameterException() {
     String now = utility.getISOTimestamp();
@@ -25,7 +25,6 @@ public class GlobalExceptionHandler {
     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(res);
   }
 
-  // Global Missing Request Body Exception
   @ExceptionHandler({ HttpMessageNotReadableException.class })
   private ResponseEntity<ExceptionDto> RequestBodyException() {
     String now = utility.getISOTimestamp();
@@ -33,7 +32,6 @@ public class GlobalExceptionHandler {
     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(res);
   }
 
-  // Global Argument Not Valid Exception
   @ExceptionHandler(MethodArgumentNotValidException.class)
   private ResponseEntity<ExceptionDto> ArgumentNotValidException() {
     String now = utility.getISOTimestamp();
@@ -41,7 +39,6 @@ public class GlobalExceptionHandler {
     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(res);
   }
 
-  // Custom Not Found Exception
   @ExceptionHandler(NotFoundException.class)
   private ResponseEntity<ExceptionDto> CustomNotFoundException(NotFoundException ex) {
     String now = utility.getISOTimestamp();
@@ -49,7 +46,6 @@ public class GlobalExceptionHandler {
     return ResponseEntity.status(HttpStatus.NOT_FOUND).body(res);
   }
 
-  // Custom Bad Request Exception
   @ExceptionHandler(BadRequestException.class)
   private ResponseEntity<ExceptionDto> BadRequestException(BadRequestException ex) {
     String now = utility.getISOTimestamp();
@@ -57,11 +53,17 @@ public class GlobalExceptionHandler {
     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(res);
   }
 
-  // Custom Unauthorized Exception
   @ExceptionHandler(UnauthorizedException.class)
   private ResponseEntity<ExceptionDto> UnauthorizedException(UnauthorizedException ex) {
     String now = utility.getISOTimestamp();
     ExceptionDto res = new ExceptionDto(now, 401, "Unauthorized", ex.getMessage());
+    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(res);
+  }
+
+  @ExceptionHandler(SignatureException.class)
+  private ResponseEntity<ExceptionDto> SignatureException() {
+    String now = utility.getISOTimestamp();
+    ExceptionDto res = new ExceptionDto(now, 401, "Unauthorized", "잘못된 토큰입니다.");
     return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(res);
   }
 }

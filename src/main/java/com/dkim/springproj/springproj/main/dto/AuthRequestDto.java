@@ -3,7 +3,7 @@ package com.dkim.springproj.springproj.main.dto;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
-public class LoginBodyDto {
+public class AuthRequestDto {
   @NotNull
   @NotBlank
   private String userId;
@@ -12,7 +12,7 @@ public class LoginBodyDto {
   @NotBlank
   private String password;
 
-  public LoginBodyDto(String userId, String password) {
+  public AuthRequestDto(String userId, String password) {
     this.userId = userId;
     this.password = password;
   }

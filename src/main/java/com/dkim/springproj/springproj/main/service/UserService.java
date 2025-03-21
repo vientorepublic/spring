@@ -1,8 +1,11 @@
 package com.dkim.springproj.springproj.main.service;
 
 import java.util.List;
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import com.dkim.springproj.springproj.main.dto.LoginBodyDto;
+import com.dkim.springproj.springproj.main.dto.AuthRequestDto;
+import com.dkim.springproj.springproj.main.dto.AuthResponseDto;
 import com.dkim.springproj.springproj.main.dto.MessageDto;
 import com.dkim.springproj.springproj.main.entity.User;
 import com.dkim.springproj.springproj.main.exception.BadRequestException;
@@ -10,10 +13,13 @@ import com.dkim.springproj.springproj.main.exception.NotFoundException;
 import com.dkim.springproj.springproj.main.exception.UnauthorizedException;
 import com.dkim.springproj.springproj.main.repository.UserRepository;
 import com.dkim.springproj.springproj.main.utility.BCrypt;
+import com.dkim.springproj.springproj.main.utility.JwtUtility;
 import com.dkim.springproj.springproj.main.utility.Utility;
 
 @Service
 public class UserService {
+  @Value("${jwt.secret}")
+  private String secretKey;
   private final UserRepository userRepository;
   private final Utility utility;
   private final BCrypt bcrypt;
@@ -50,7 +56,7 @@ public class UserService {
     return userRepository.findAll();
   }
 
-  public MessageDto mockLogin(LoginBodyDto body) {
+  public AuthResponseDto Login(AuthRequestDto body) {
     String userId = body.getUserId();
     String password = body.getPassword();
     User user = userRepository.findByUserId(userId);
@@ -62,7 +68,8 @@ public class UserService {
     if (!compare) {
       throw new UnauthorizedException("아이디 또는 비밀번호가 틀렸습니다.");
     }
-    return new MessageDto("로그인 성공: " + user.getUserId());
+    String token = new JwtUtility().sign(secretKey, userId);
+    return new AuthResponseDto(String.format("환영합니다, %s님!", userId), token);
   }
 
   public User getUserByID(String id) {
