@@ -22,7 +22,7 @@ public class UserController {
   }
 
   @PostMapping("/login")
-  public MessageDto mockLogin(@RequestBody @Valid AuthRequestDto body) {
+  public MessageDto Login(@RequestBody @Valid AuthRequestDto body) {
     return userService.Login(body);
   }
 
