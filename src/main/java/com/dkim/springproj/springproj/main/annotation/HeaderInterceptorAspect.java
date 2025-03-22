@@ -69,8 +69,12 @@ public class HeaderInterceptorAspect {
     String userId = claims.getAudience();
     User user = userRepository.findByUserId(userId)
         .orElseThrow(() -> new UnauthorizedException("유효하지 않은 사용자입니다."));
-
-    if (!user.getRole().equals(authGuard.role())) {
+    String role = authGuard.role();
+    String userRole = user.getRole();
+    if (role.equals("ALL")) {
+      return;
+    }
+    if (!userRole.equals(role)) {
       throw new UnauthorizedException("권한이 없습니다.");
     }
   }
