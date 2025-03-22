@@ -32,6 +32,11 @@ public class User {
   @NotBlank
   private String password;
 
+  @Column(nullable = false)
+  @NotNull
+  @NotBlank
+  private String role = "USER";
+
   @Column(nullable = false, updatable = false)
   @CreationTimestamp
   private Date timestamp;
