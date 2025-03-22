@@ -32,9 +32,18 @@ public class UserService {
   public MessageDto createUser(User user) {
     String userId = user.getUserId();
     String email = user.getEmail();
+    String password = user.getPassword();
+    boolean isValidUserId = utility.isUserId(userId);
+    if (!isValidUserId) {
+      throw new BadRequestException("아이디는 3~25자의 영문 대소문자와 숫자로 이루어져야 합니다.");
+    }
     boolean isValidEmail = utility.isEmail(email);
     if (!isValidEmail) {
       throw new BadRequestException("올바른 이메일 주소를 입력해주세요.");
+    }
+    boolean isValidPassword = utility.isPassword(password);
+    if (!isValidPassword) {
+      throw new BadRequestException("비밀번호는 5~30자의 영문 대소문자, 숫자, 특수문자로 이루어져야 합니다.");
     }
     boolean isUserIdExist = userRepository.existsByUserId(userId);
     if (isUserIdExist) {
@@ -44,24 +53,17 @@ public class UserService {
     if (isEmailExist) {
       throw new BadRequestException("이메일 주소가 이미 사용중입니다.");
     }
-    String plainPassword = user.getPassword();
-    String hash = bcrypt.hash(plainPassword);
+    String hash = bcrypt.hash(password);
     user.setPassword(hash);
     userRepository.save(user);
     return new MessageDto("회원가입이 완료되었습니다.");
   }
 
-  public List<User> getAllUsers() {
-    return userRepository.findAll();
-  }
-
   public AuthResponseDto Login(AuthRequestDto body) {
     String userId = body.getUserId();
     String password = body.getPassword();
-    User user = userRepository.findByUserId(userId);
-    if (user == null) {
-      throw new UnauthorizedException("아이디 또는 비밀번호가 틀렸습니다.");
-    }
+    User user = userRepository.findByUserId(userId)
+        .orElseThrow(() -> new UnauthorizedException("아이디 또는 비밀번호가 틀렸습니다."));
     String hash = user.getPassword();
     boolean compare = bcrypt.compare(password, hash);
     if (!compare) {
@@ -73,13 +75,12 @@ public class UserService {
   }
 
   public User getUserByID(String id) {
-    if (id.length() == 0) {
-      throw new BadRequestException("필수 인자가 비어있습니다.");
-    }
-    User result = userRepository.findByUserId(id);
-    if (result == null) {
-      throw new NotFoundException("해당 사용자를 찾을 수 없습니다.");
-    }
+    User result = userRepository.findByUserId(id)
+        .orElseThrow(() -> new NotFoundException("해당 사용자를 찾을 수 없습니다."));
     return result;
+  }
+
+  public List<User> getAllUsers() {
+    return userRepository.findAll();
   }
 }

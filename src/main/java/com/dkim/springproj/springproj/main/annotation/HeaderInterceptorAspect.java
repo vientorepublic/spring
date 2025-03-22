@@ -23,9 +23,7 @@ public class HeaderInterceptorAspect {
   public Object checkAuthorization(ProceedingJoinPoint joinPoint) throws Throwable {
     HttpServletRequest request = getCurrentHttpRequest();
     String token = extractToken(request);
-
     validateToken(token);
-
     Object[] args = modifyArguments(joinPoint.getArgs(), token);
     return joinPoint.proceed(args);
   }
@@ -43,7 +41,7 @@ public class HeaderInterceptorAspect {
     if (token == null) {
       throw new UnauthorizedException("Authorization 헤더를 찾을 수 없습니다.");
     }
-    if (!token.startsWith("Bearer ")) {
+    if (!token.startsWith("Bearer")) {
       throw new UnauthorizedException("Bearer 토큰을 찾을 수 없습니다.");
     }
     return token.substring(7);

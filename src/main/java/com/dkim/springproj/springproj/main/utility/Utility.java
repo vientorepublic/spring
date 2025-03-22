@@ -15,6 +15,14 @@ public class Utility {
     return timestamp;
   }
 
+  public boolean isUserId(String userId) {
+    return userId.matches("^[a-zA-Z0-9]{3,25}$");
+  }
+
+  public boolean isPassword(String password) {
+    return password.matches("^[a-zA-Z0-9!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>\\/?]{5,30}$");
+  }
+
   public boolean isEmail(String email) {
     return email.matches("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$");
   }

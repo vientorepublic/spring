@@ -20,6 +20,7 @@ public class MainService {
   @AuthGuard()
   public MessageDto Auth(String token) {
     Claims claims = jwtUtility.decodeToken(secretKey, token);
-    return new MessageDto("Hello, " + claims.getAudience() + "!");
+    String userId = claims.getAudience();
+    return new MessageDto("Hello, " + userId + "!");
   }
 }
