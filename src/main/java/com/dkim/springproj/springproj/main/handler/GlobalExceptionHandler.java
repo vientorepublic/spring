@@ -13,7 +13,6 @@ import com.dkim.springproj.springproj.main.exception.InternalServerException;
 import com.dkim.springproj.springproj.main.exception.NotFoundException;
 import com.dkim.springproj.springproj.main.exception.UnauthorizedException;
 import com.dkim.springproj.springproj.main.utility.Utility;
-import io.jsonwebtoken.security.SignatureException;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
@@ -58,13 +57,6 @@ public class GlobalExceptionHandler {
   private ResponseEntity<ExceptionDto> UnauthorizedException(UnauthorizedException ex) {
     String now = utility.getISOTimestamp();
     ExceptionDto res = new ExceptionDto(now, 401, "Unauthorized", ex.getMessage());
-    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(res);
-  }
-
-  @ExceptionHandler(SignatureException.class)
-  private ResponseEntity<ExceptionDto> SignatureException() {
-    String now = utility.getISOTimestamp();
-    ExceptionDto res = new ExceptionDto(now, 401, "Unauthorized", "잘못된 토큰입니다.");
     return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(res);
   }
 
