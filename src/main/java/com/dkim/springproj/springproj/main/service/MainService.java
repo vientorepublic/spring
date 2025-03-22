@@ -17,7 +17,7 @@ public class MainService {
     return new MessageDto("Hello, World!");
   }
 
-  @AuthGuard
+  @AuthGuard(role = "ADMIN")
   public MessageDto Auth(String token) {
     Claims claims = jwtUtility.decodeToken(secretKey, token);
     String userId = claims.getAudience();
