@@ -8,5 +8,9 @@ import java.lang.annotation.Target;
 @Target(ElementType.PARAMETER)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface AuthGuard {
-  String role() default "USER";
+  Role role() default Role.USER;
+
+  enum Role {
+    ALL, ADMIN, USER
+  }
 }

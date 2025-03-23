@@ -16,6 +16,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import java.lang.reflect.Parameter;
+import com.dkim.springproj.springproj.main.annotation.AuthGuard.Role;
 
 @Aspect
 @Component
@@ -84,12 +85,12 @@ public class HeaderInterceptorAspect {
     String userId = claims.getAudience();
     User user = userRepository.findByUserId(userId)
         .orElseThrow(() -> new UnauthorizedException("유효하지 않은 사용자입니다."));
-    String role = authGuard.role();
+    Role role = authGuard.role();
     String userRole = user.getRole();
-    if (role.equals("ALL")) {
+    if (role == Role.ALL) {
       return;
     }
-    if (!userRole.equals(role)) {
+    if (!userRole.equals(role.name())) {
       throw new UnauthorizedException("권한이 없습니다.");
     }
   }
