@@ -3,6 +3,7 @@ package com.dkim.springproj.springproj.main.annotation;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import com.dkim.springproj.springproj.main.entity.User;
@@ -14,6 +15,7 @@ import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+import java.lang.reflect.Parameter;
 
 @Aspect
 @Component
@@ -29,16 +31,29 @@ public class HeaderInterceptorAspect {
     this.jwtUtility = new JwtUtility();
   }
 
-  @Around("@annotation(authGuard)")
-  public Object checkAuthorization(ProceedingJoinPoint joinPoint, AuthGuard authGuard) throws Throwable {
+  @Around("@annotation(org.aspectj.lang.annotation.Pointcut) || execution(* *(.., @com.dkim.springproj.springproj.main.annotation.AuthGuard (*), ..))")
+  public Object checkAuthorization(ProceedingJoinPoint joinPoint) throws Throwable {
     HttpServletRequest request = getCurrentHttpRequest();
     String token = extractToken(request);
     Claims claims = decodeAndValidateToken(token);
 
-    validateUserAndRole(claims, authGuard);
+    AuthGuard authGuard = getAuthGuardAnnotation(joinPoint);
+    if (authGuard != null) {
+      validateUserAndRole(claims, authGuard);
+    }
 
-    Object[] modifiedArgs = modifyArguments(joinPoint.getArgs(), token);
+    Object[] modifiedArgs = injectTokenIntoParameters(joinPoint, token);
     return joinPoint.proceed(modifiedArgs);
+  }
+
+  private AuthGuard getAuthGuardAnnotation(ProceedingJoinPoint joinPoint) {
+    Parameter[] parameters = ((MethodSignature) joinPoint.getSignature()).getMethod().getParameters();
+    for (Parameter parameter : parameters) {
+      if (parameter.isAnnotationPresent(AuthGuard.class)) {
+        return parameter.getAnnotation(AuthGuard.class);
+      }
+    }
+    return null;
   }
 
   private HttpServletRequest getCurrentHttpRequest() {
@@ -79,9 +94,14 @@ public class HeaderInterceptorAspect {
     }
   }
 
-  private Object[] modifyArguments(Object[] args, String token) {
-    if (args.length > 0 && args[0] instanceof String) {
-      args[0] = token;
+  private Object[] injectTokenIntoParameters(ProceedingJoinPoint joinPoint, String token) {
+    Object[] args = joinPoint.getArgs();
+    Parameter[] parameters = ((MethodSignature) joinPoint.getSignature()).getMethod().getParameters();
+
+    for (int i = 0; i < parameters.length; i++) {
+      if (parameters[i].isAnnotationPresent(AuthGuard.class)) {
+        args[i] = token;
+      }
     }
     return args;
   }
