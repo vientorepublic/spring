@@ -1,7 +1,6 @@
 package com.dkim.springproj.springproj.main.controller;
 
 import org.springframework.web.bind.annotation.RestController;
-import com.dkim.springproj.springproj.main.annotation.AuthGuard;
 import com.dkim.springproj.springproj.main.dto.MessageDto;
 import com.dkim.springproj.springproj.main.service.MainService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,10 +16,5 @@ public class MainController {
   @GetMapping
   public MessageDto Main() {
     return mainService.Main();
-  }
-
-  @GetMapping("/auth")
-  public MessageDto Auth(@AuthGuard(role = AuthGuard.Role.ADMIN) String token) {
-    return mainService.Auth(token);
   }
 }

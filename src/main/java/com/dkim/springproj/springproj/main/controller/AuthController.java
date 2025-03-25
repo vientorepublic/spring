@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/users")
-public class UserController {
+@RequestMapping("/auth")
+public class AuthController {
   @Autowired
   private UserService userService;
 

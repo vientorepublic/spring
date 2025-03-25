@@ -18,52 +18,44 @@ import com.dkim.springproj.springproj.main.utility.Utility;
 public class GlobalExceptionHandler {
   private final Utility utility = new Utility();
 
-  @ExceptionHandler(MissingServletRequestParameterException.class)
-  private ResponseEntity<ExceptionDto> RequestParameterException() {
+  private ResponseEntity<ExceptionDto> buildResponse(HttpStatus status, String error, String message) {
     String now = utility.getISOTimestamp();
-    ExceptionDto res = new ExceptionDto(now, 400, "Bad Request", "필수 인자가 누락되었습니다.");
-    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(res);
+    ExceptionDto res = new ExceptionDto(now, status.value(), error, message);
+    return ResponseEntity.status(status).body(res);
   }
 
-  @ExceptionHandler({ HttpMessageNotReadableException.class })
-  private ResponseEntity<ExceptionDto> RequestBodyException() {
-    String now = utility.getISOTimestamp();
-    ExceptionDto res = new ExceptionDto(now, 400, "Bad Request", "필수 인자가 누락되었습니다.");
-    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(res);
+  @ExceptionHandler(MissingServletRequestParameterException.class)
+  private ResponseEntity<ExceptionDto> handleMissingRequestParameter() {
+    return buildResponse(HttpStatus.BAD_REQUEST, "Bad Request", "필수 인자가 누락되었습니다.");
+  }
+
+  @ExceptionHandler(HttpMessageNotReadableException.class)
+  private ResponseEntity<ExceptionDto> handleHttpMessageNotReadable() {
+    return buildResponse(HttpStatus.BAD_REQUEST, "Bad Request", "필수 인자가 누락되었습니다.");
   }
 
   @ExceptionHandler(MethodArgumentNotValidException.class)
-  private ResponseEntity<ExceptionDto> ArgumentNotValidException() {
-    String now = utility.getISOTimestamp();
-    ExceptionDto res = new ExceptionDto(now, 400, "Bad Request", "필수 인자가 누락되었습니다.");
-    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(res);
+  private ResponseEntity<ExceptionDto> handleMethodArgumentNotValid() {
+    return buildResponse(HttpStatus.BAD_REQUEST, "Bad Request", "필수 인자가 누락되었습니다.");
   }
 
   @ExceptionHandler(NotFoundException.class)
-  private ResponseEntity<ExceptionDto> CustomNotFoundException(NotFoundException ex) {
-    String now = utility.getISOTimestamp();
-    ExceptionDto res = new ExceptionDto(now, 404, "Not Found", ex.getMessage());
-    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(res);
+  private ResponseEntity<ExceptionDto> handleNotFound(NotFoundException ex) {
+    return buildResponse(HttpStatus.NOT_FOUND, "Not Found", ex.getMessage());
   }
 
   @ExceptionHandler(BadRequestException.class)
-  private ResponseEntity<ExceptionDto> BadRequestException(BadRequestException ex) {
-    String now = utility.getISOTimestamp();
-    ExceptionDto res = new ExceptionDto(now, 400, "Bad Request", ex.getMessage());
-    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(res);
+  private ResponseEntity<ExceptionDto> handleBadRequest(BadRequestException ex) {
+    return buildResponse(HttpStatus.BAD_REQUEST, "Bad Request", ex.getMessage());
   }
 
   @ExceptionHandler(UnauthorizedException.class)
-  private ResponseEntity<ExceptionDto> UnauthorizedException(UnauthorizedException ex) {
-    String now = utility.getISOTimestamp();
-    ExceptionDto res = new ExceptionDto(now, 401, "Unauthorized", ex.getMessage());
-    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(res);
+  private ResponseEntity<ExceptionDto> handleUnauthorized(UnauthorizedException ex) {
+    return buildResponse(HttpStatus.UNAUTHORIZED, "Unauthorized", ex.getMessage());
   }
 
   @ExceptionHandler(InternalServerException.class)
-  private ResponseEntity<ExceptionDto> InternalServerException(InternalServerException ex) {
-    String now = utility.getISOTimestamp();
-    ExceptionDto res = new ExceptionDto(now, 500, "Internal Server Error", ex.getMessage());
-    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(res);
+  private ResponseEntity<ExceptionDto> handleInternalServerError(InternalServerException ex) {
+    return buildResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Internal Server Error", ex.getMessage());
   }
 }
