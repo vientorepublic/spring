@@ -1,6 +1,7 @@
 package com.dkim.springproj.springproj.main.service;
 
 import com.dkim.springproj.springproj.main.dto.PostBodyDto;
+import com.dkim.springproj.springproj.main.dto.ViewPostDto;
 import com.dkim.springproj.springproj.main.entity.Post;
 import com.dkim.springproj.springproj.main.entity.User;
 import com.dkim.springproj.springproj.main.exception.NotFoundException;
@@ -8,11 +9,11 @@ import com.dkim.springproj.springproj.main.exception.UnauthorizedException;
 import com.dkim.springproj.springproj.main.repository.PostRepository;
 import com.dkim.springproj.springproj.main.repository.UserRepository;
 import com.dkim.springproj.springproj.main.utility.JwtUtility;
+import com.dkim.springproj.springproj.main.utility.Pagination;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import java.util.List;
-import java.util.Optional;
 import io.jsonwebtoken.Claims;
+import java.util.List;
 
 @Service
 public class BoardService {
@@ -21,6 +22,7 @@ public class BoardService {
   @Value("${jwt.secret}")
   private String secret;
   private final JwtUtility jwtUtility;
+  private final int pageSize = 10;
 
   public BoardService(PostRepository postRepository, UserRepository userRepository) {
     this.postRepository = postRepository;
@@ -41,14 +43,23 @@ public class BoardService {
     return postRepository.save(newPost);
   }
 
-  // Retrieve all posts
-  public List<Post> getAllPosts() {
-    return postRepository.findAll();
+  // Retrieve paginated posts
+  public Pagination<ViewPostDto> getPaginatedPosts(int page) {
+    List<Post> allPosts = postRepository.findAll();
+    List<ViewPostDto> postDtos = allPosts.stream()
+        .map(post -> new ViewPostDto(post.getTitle(), post.getContent(), post.getUser().getUserId(),
+            post.getTimestamp()))
+        .toList();
+    Pagination<ViewPostDto> pagination = new Pagination(postDtos, pageSize);
+    pagination.setCurrentPage(page);
+    return pagination;
   }
 
   // Retrieve a post by ID
-  public Optional<Post> getPostById(Long id) {
-    return postRepository.findById(id);
+  public ViewPostDto getPostById(Long id) {
+    Post post = postRepository.findById(id)
+        .orElseThrow(() -> new NotFoundException("게시글을 찾을 수 없습니다."));
+    return new ViewPostDto(post.getTitle(), post.getContent(), post.getUser().getUserId(), post.getTimestamp());
   }
 
   // Delete a post by ID

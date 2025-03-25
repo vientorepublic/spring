@@ -11,6 +11,11 @@ public class PostBodyDto {
   @NotBlank
   private String content;
 
+  public PostBodyDto(String title, String content) {
+    this.title = title;
+    this.content = content;
+  }
+
   public String getTitle() {
     return title;
   }
