@@ -11,4 +11,8 @@ public class UnauthorizedException extends RuntimeException {
   public String getMessage() {
     return this.message;
   }
+
+  public void setMessage(String message) {
+    this.message = message;
+  }
 }

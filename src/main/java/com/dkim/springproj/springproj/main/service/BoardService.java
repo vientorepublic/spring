@@ -46,11 +46,11 @@ public class BoardService {
   // Retrieve paginated posts
   public Pagination<ViewPostDto> getPaginatedPosts(int page) {
     List<Post> allPosts = postRepository.findAll();
-    List<ViewPostDto> postDtos = allPosts.stream()
-        .map(post -> new ViewPostDto(post.getTitle(), post.getContent(), post.getUser().getUserId(),
+    List<ViewPostDto> posts = allPosts.stream()
+        .map(post -> new ViewPostDto(post.getId(), post.getTitle(), post.getContent(), post.getUser().getUserId(),
             post.getTimestamp()))
         .toList();
-    Pagination<ViewPostDto> pagination = new Pagination(postDtos, pageSize);
+    Pagination<ViewPostDto> pagination = new Pagination<>(posts, pageSize);
     pagination.setCurrentPage(page);
     return pagination;
   }
@@ -59,7 +59,8 @@ public class BoardService {
   public ViewPostDto getPostById(Long id) {
     Post post = postRepository.findById(id)
         .orElseThrow(() -> new NotFoundException("게시글을 찾을 수 없습니다."));
-    return new ViewPostDto(post.getTitle(), post.getContent(), post.getUser().getUserId(), post.getTimestamp());
+    return new ViewPostDto(post.getId(), post.getTitle(), post.getContent(), post.getUser().getUserId(),
+        post.getTimestamp());
   }
 
   // Delete a post by ID

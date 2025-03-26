@@ -17,15 +17,31 @@ public class ExceptionDto {
     return this.timestamp;
   }
 
+  public void setTimestamp(String timestamp) {
+    this.timestamp = timestamp;
+  }
+
   public Number getStatus() {
     return this.status;
+  }
+
+  public void setStatus(Number status) {
+    this.status = status;
   }
 
   public String getError() {
     return this.error;
   }
 
+  public void setError(String error) {
+    this.error = error;
+  }
+
   public String getMessage() {
     return this.message;
+  }
+
+  public void setMessage(String message) {
+    this.message = message;
   }
 }
