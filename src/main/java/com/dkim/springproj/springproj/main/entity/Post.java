@@ -23,6 +23,9 @@ public class Post {
   @Column(nullable = false)
   private String content;
 
+  @Column(nullable = false)
+  private String preview;
+
   @Column(nullable = false, updatable = false)
   @CreationTimestamp
   private Date timestamp;
@@ -41,6 +44,14 @@ public class Post {
 
   public void setTitle(String title) {
     this.title = title;
+  }
+
+  public String getPreview() {
+    return preview;
+  }
+
+  public void setPreview(String preview) {
+    this.preview = preview;
   }
 
   public String getContent() {

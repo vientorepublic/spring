@@ -1,7 +1,8 @@
 package com.dkim.springproj.springproj.main.service;
 
 import com.dkim.springproj.springproj.main.dto.PostBodyDto;
-import com.dkim.springproj.springproj.main.dto.ViewPostDto;
+import com.dkim.springproj.springproj.main.dto.PostPreviewDto;
+import com.dkim.springproj.springproj.main.dto.PostViewDto;
 import com.dkim.springproj.springproj.main.entity.Post;
 import com.dkim.springproj.springproj.main.entity.User;
 import com.dkim.springproj.springproj.main.exception.NotFoundException;
@@ -10,6 +11,7 @@ import com.dkim.springproj.springproj.main.repository.PostRepository;
 import com.dkim.springproj.springproj.main.repository.UserRepository;
 import com.dkim.springproj.springproj.main.utility.JwtUtility;
 import com.dkim.springproj.springproj.main.utility.Pagination;
+import com.dkim.springproj.springproj.main.utility.Utility;
 import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -22,6 +24,7 @@ public class BoardService {
   private final PostRepository postRepository;
   private final UserRepository userRepository;
   private final JwtUtility jwtUtility;
+  private final Utility utility;
 
   @Value("${jwt.secret}")
   private String secret;
@@ -32,6 +35,7 @@ public class BoardService {
     this.postRepository = postRepository;
     this.userRepository = userRepository;
     this.jwtUtility = new JwtUtility();
+    this.utility = new Utility();
   }
 
   public Post createPost(String token, PostBodyDto postBodyDto) {
@@ -40,16 +44,16 @@ public class BoardService {
     return postRepository.save(newPost);
   }
 
-  public Pagination<ViewPostDto> getPaginatedPosts(int page) {
-    List<ViewPostDto> posts = postRepository.findAll().stream()
-        .map(this::mapToViewPostDto)
+  public Pagination<PostPreviewDto> getPaginatedPosts(int page) {
+    List<PostPreviewDto> posts = postRepository.findAll().stream()
+        .map(this::mapToPreviewPostDto)
         .collect(Collectors.toList());
-    Pagination<ViewPostDto> pagination = new Pagination<>(posts, PAGE_SIZE);
+    Pagination<PostPreviewDto> pagination = new Pagination<>(posts, PAGE_SIZE);
     pagination.setCurrentPage(page);
     return pagination;
   }
 
-  public ViewPostDto getPostById(Long id) {
+  public PostViewDto getPostById(Long id) {
     Post post = findPostById(id);
     return mapToViewPostDto(post);
   }
@@ -82,16 +86,26 @@ public class BoardService {
   private Post mapToPost(PostBodyDto postBodyDto, User user) {
     Post post = new Post();
     post.setTitle(postBodyDto.getTitle());
+    post.setPreview(utility.convertPreview(postBodyDto.getContent()));
     post.setContent(postBodyDto.getContent());
     post.setUser(user);
     return post;
   }
 
-  private ViewPostDto mapToViewPostDto(Post post) {
-    return new ViewPostDto(
+  private PostViewDto mapToViewPostDto(Post post) {
+    return new PostViewDto(
         post.getId(),
         post.getTitle(),
         post.getContent(),
+        post.getUser().getUserId(),
+        post.getTimestamp());
+  }
+
+  private PostPreviewDto mapToPreviewPostDto(Post post) {
+    return new PostPreviewDto(
+        post.getId(),
+        post.getTitle(),
+        post.getPreview(),
         post.getUser().getUserId(),
         post.getTimestamp());
   }

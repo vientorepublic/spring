@@ -23,6 +23,10 @@ public class Utility {
     return password.matches("^[a-zA-Z0-9!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>\\/?]{5,30}$");
   }
 
+  public String convertPreview(String content) {
+    return content.substring(0, Math.min(content.length(), 100));
+  }
+
   public boolean isEmail(String email) {
     return email.matches("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$");
   }

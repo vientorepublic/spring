@@ -2,12 +2,12 @@ package com.dkim.springproj.springproj.main.dto;
 
 import java.util.Date;
 
-public class ViewPostDto extends PostBodyDto {
+public class PostViewDto extends PostBodyDto {
   private Long id;
   private String author;
   private Date timestamp;
 
-  public ViewPostDto(Long id, String title, String content, String author, Date timestamp) {
+  public PostViewDto(Long id, String title, String content, String author, Date timestamp) {
     super(title, content);
     this.id = id;
     this.author = author;

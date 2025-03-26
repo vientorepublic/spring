@@ -3,7 +3,8 @@ package com.dkim.springproj.springproj.main.controller;
 import com.dkim.springproj.springproj.main.annotation.AuthGuard;
 import com.dkim.springproj.springproj.main.annotation.AuthGuard.Role;
 import com.dkim.springproj.springproj.main.dto.PostBodyDto;
-import com.dkim.springproj.springproj.main.dto.ViewPostDto;
+import com.dkim.springproj.springproj.main.dto.PostPreviewDto;
+import com.dkim.springproj.springproj.main.dto.PostViewDto;
 import com.dkim.springproj.springproj.main.entity.Post;
 import com.dkim.springproj.springproj.main.service.BoardService;
 import com.dkim.springproj.springproj.main.utility.Pagination;
@@ -28,13 +29,13 @@ public class BoardController {
 
   // Retrieve all posts
   @GetMapping("/all")
-  public Pagination<ViewPostDto> getAllPosts(@RequestParam(defaultValue = "1") int page) {
+  public Pagination<PostPreviewDto> getAllPosts(@RequestParam(defaultValue = "1") int page) {
     return boardService.getPaginatedPosts(page);
   }
 
   // Retrieve a post by ID
   @GetMapping("/{id}")
-  public ViewPostDto getPostById(@PathVariable Long id) {
+  public PostViewDto getPostById(@PathVariable Long id) {
     return boardService.getPostById(id);
   }
 
