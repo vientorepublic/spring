@@ -21,7 +21,7 @@ public class AuthController {
 
   @PostMapping("/login")
   public MessageDto Login(@RequestBody @Valid AuthRequestDto body) {
-    return userService.Login(body);
+    return userService.login(body);
   }
 
   @PostMapping("/register")
@@ -31,6 +31,6 @@ public class AuthController {
 
   @GetMapping("/findUser")
   public User getUserByID(@RequestParam String id) {
-    return userService.getUserByID(id);
+    return userService.getUserById(id);
   }
 }

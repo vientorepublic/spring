@@ -26,11 +26,11 @@ public class UserService {
   private final BCrypt bcrypt;
   private final JwtUtility jwtUtility;
 
-  public UserService(UserRepository userRepository, Utility utility, BCrypt bcrypt, JwtUtility jwtUtility) {
+  public UserService(UserRepository userRepository) {
     this.userRepository = userRepository;
-    this.utility = utility;
-    this.bcrypt = bcrypt;
-    this.jwtUtility = jwtUtility;
+    this.utility = new Utility();
+    this.bcrypt = new BCrypt();
+    this.jwtUtility = new JwtUtility();
   }
 
   public MessageDto createUser(User user) {
