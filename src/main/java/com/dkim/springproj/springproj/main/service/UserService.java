@@ -17,7 +17,6 @@ import com.dkim.springproj.springproj.main.utility.Utility;
 
 @Service
 public class UserService {
-
   @Value("${jwt.secret}")
   private String secretKey;
 

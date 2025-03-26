@@ -1,5 +1,6 @@
 package com.dkim.springproj.springproj.main.service;
 
+import com.dkim.springproj.springproj.main.dto.MessageDto;
 import com.dkim.springproj.springproj.main.dto.PostBodyDto;
 import com.dkim.springproj.springproj.main.dto.PostPreviewDto;
 import com.dkim.springproj.springproj.main.dto.PostViewDto;
@@ -20,7 +21,6 @@ import java.util.stream.Collectors;
 
 @Service
 public class BoardService {
-
   private final PostRepository postRepository;
   private final UserRepository userRepository;
   private final JwtUtility jwtUtility;
@@ -38,9 +38,9 @@ public class BoardService {
     this.utility = new Utility();
   }
 
-  public Post createPost(String token, PostBodyDto postBodyDto) {
+  public Post createPost(String token, PostBodyDto body) {
     User user = getUserFromToken(token);
-    Post newPost = mapToPost(postBodyDto, user);
+    Post newPost = mapToPost(body, user);
     return postRepository.save(newPost);
   }
 
@@ -65,6 +65,22 @@ public class BoardService {
     postRepository.deleteById(id);
   }
 
+  public MessageDto updatePost(String token, Long id, PostBodyDto body) {
+    String title = body.getTitle();
+    String content = body.getContent();
+    User user = getUserFromToken(token);
+    Post post = findPostById(id);
+    validatePostOwnership(user, post);
+
+    post.setTitle(title);
+    post.setContent(content);
+    post.setPreview(utility.convertPreview(content));
+
+    postRepository.save(post);
+
+    return new MessageDto("게시글이 수정되었습니다.");
+  }
+
   private User getUserFromToken(String token) {
     Claims jwtPayload = jwtUtility.decodeToken(secret, token);
     String userId = jwtPayload.getAudience();
@@ -79,7 +95,7 @@ public class BoardService {
 
   private void validatePostOwnership(User user, Post post) {
     if (!post.getUser().getUserId().equals(user.getUserId())) {
-      throw new UnauthorizedException("해당 게시글을 삭제할 권한이 없습니다.");
+      throw new UnauthorizedException("해당 게시글을 수정할 권한이 없습니다.");
     }
   }
 

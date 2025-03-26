@@ -2,6 +2,7 @@ package com.dkim.springproj.springproj.main.controller;
 
 import com.dkim.springproj.springproj.main.annotation.AuthGuard;
 import com.dkim.springproj.springproj.main.annotation.AuthGuard.Role;
+import com.dkim.springproj.springproj.main.dto.MessageDto;
 import com.dkim.springproj.springproj.main.dto.PostBodyDto;
 import com.dkim.springproj.springproj.main.dto.PostPreviewDto;
 import com.dkim.springproj.springproj.main.dto.PostViewDto;
@@ -37,6 +38,13 @@ public class BoardController {
   @GetMapping("/{id}")
   public PostViewDto getPostById(@PathVariable Long id) {
     return boardService.getPostById(id);
+  }
+
+  // Update a post by ID
+  @PutMapping("/edit/{id}")
+  public MessageDto updatePost(@AuthGuard(role = Role.ALL) String token, @PathVariable Long id,
+      @RequestBody @Valid PostBodyDto body) {
+    return boardService.updatePost(token, id, body);
   }
 
   // Delete a post by ID
