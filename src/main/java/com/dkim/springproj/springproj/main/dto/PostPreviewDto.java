@@ -8,13 +8,15 @@ public class PostPreviewDto {
   private String preview;
   private String userId;
   private Date timestamp;
+  private Date updated;
 
-  public PostPreviewDto(Long id, String title, String preview, String userId, Date timestamp) {
+  public PostPreviewDto(Long id, String title, String preview, String userId, Date timestamp, Date updated) {
     this.id = id;
     this.title = title;
     this.preview = preview;
     this.userId = userId;
     this.timestamp = timestamp;
+    this.updated = updated;
   }
 
   public Long getId() {
@@ -55,5 +57,13 @@ public class PostPreviewDto {
 
   public void setTimestamp(Date timestamp) {
     this.timestamp = timestamp;
+  }
+
+  public Date getUpdated() {
+    return updated;
+  }
+
+  public void setUpdated(Date updated) {
+    this.updated = updated;
   }
 }

@@ -16,8 +16,9 @@ import com.dkim.springproj.springproj.main.utility.Utility;
 import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import java.util.List;
 import java.util.stream.Collectors;
+import java.util.Date;
+import java.util.List;
 
 @Service
 public class BoardService {
@@ -38,10 +39,11 @@ public class BoardService {
     this.utility = new Utility();
   }
 
-  public Post createPost(String token, PostBodyDto body) {
+  public MessageDto createPost(String token, PostBodyDto body) {
     User user = getUserFromToken(token);
     Post newPost = mapToPost(body, user);
-    return postRepository.save(newPost);
+    postRepository.save(newPost);
+    return new MessageDto("게시글이 작성되었습니다.");
   }
 
   public Pagination<PostPreviewDto> getPaginatedPosts(int page) {
@@ -74,6 +76,7 @@ public class BoardService {
 
     post.setTitle(title);
     post.setContent(content);
+    post.setUpdated(new Date());
     post.setPreview(utility.convertPreview(content));
 
     postRepository.save(post);
@@ -114,7 +117,8 @@ public class BoardService {
         post.getTitle(),
         post.getContent(),
         post.getUser().getUserId(),
-        post.getTimestamp());
+        post.getTimestamp(),
+        post.getUpdated());
   }
 
   private PostPreviewDto mapToPreviewPostDto(Post post) {
@@ -123,6 +127,7 @@ public class BoardService {
         post.getTitle(),
         post.getPreview(),
         post.getUser().getUserId(),
-        post.getTimestamp());
+        post.getTimestamp(),
+        post.getUpdated());
   }
 }

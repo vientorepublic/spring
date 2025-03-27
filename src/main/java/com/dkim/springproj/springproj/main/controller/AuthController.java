@@ -4,6 +4,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.dkim.springproj.springproj.main.dto.AuthRequestDto;
+import com.dkim.springproj.springproj.main.dto.AuthResponseDto;
 import com.dkim.springproj.springproj.main.dto.MessageDto;
 import com.dkim.springproj.springproj.main.entity.User;
 import com.dkim.springproj.springproj.main.service.UserService;
@@ -20,7 +21,7 @@ public class AuthController {
   private UserService userService;
 
   @PostMapping("/login")
-  public MessageDto Login(@RequestBody @Valid AuthRequestDto body) {
+  public AuthResponseDto Login(@RequestBody @Valid AuthRequestDto body) {
     return userService.login(body);
   }
 

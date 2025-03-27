@@ -30,6 +30,9 @@ public class Post {
   @CreationTimestamp
   private Date timestamp;
 
+  @Column()
+  private Date updated;
+
   @ManyToOne
   @JoinColumn(name = "user_id", nullable = false)
   private User user;
@@ -64,6 +67,14 @@ public class Post {
 
   public Date getTimestamp() {
     return timestamp;
+  }
+
+  public Date getUpdated() {
+    return updated;
+  }
+
+  public void setUpdated(Date updated) {
+    this.updated = updated;
   }
 
   public User getUser() {

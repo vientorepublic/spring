@@ -6,12 +6,14 @@ public class PostViewDto extends PostBodyDto {
   private Long id;
   private String author;
   private Date timestamp;
+  private Date updated;
 
-  public PostViewDto(Long id, String title, String content, String author, Date timestamp) {
+  public PostViewDto(Long id, String title, String content, String author, Date timestamp, Date updated) {
     super(title, content);
     this.id = id;
     this.author = author;
     this.timestamp = timestamp;
+    this.updated = updated;
   }
 
   public Long getId() {
@@ -36,5 +38,13 @@ public class PostViewDto extends PostBodyDto {
 
   public void setTimestamp(Date timestamp) {
     this.timestamp = timestamp;
+  }
+
+  public Date getUpdated() {
+    return updated;
+  }
+
+  public void setUpdated(Date updated) {
+    this.updated = updated;
   }
 }

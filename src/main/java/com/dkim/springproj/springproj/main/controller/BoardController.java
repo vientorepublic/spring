@@ -6,7 +6,6 @@ import com.dkim.springproj.springproj.main.dto.MessageDto;
 import com.dkim.springproj.springproj.main.dto.PostBodyDto;
 import com.dkim.springproj.springproj.main.dto.PostPreviewDto;
 import com.dkim.springproj.springproj.main.dto.PostViewDto;
-import com.dkim.springproj.springproj.main.entity.Post;
 import com.dkim.springproj.springproj.main.service.BoardService;
 import com.dkim.springproj.springproj.main.utility.Pagination;
 import jakarta.validation.Valid;
@@ -22,15 +21,14 @@ public class BoardController {
 
   // Create a new post
   @PostMapping("/create")
-  public ResponseEntity<Post> createPost(@AuthGuard(role = Role.ALL) String token,
+  public MessageDto createPost(@AuthGuard(role = Role.ALL) String token,
       @RequestBody @Valid PostBodyDto post) {
-    Post createdPost = boardService.createPost(token, post);
-    return ResponseEntity.ok(createdPost);
+    return boardService.createPost(token, post);
   }
 
   // Retrieve all posts
   @GetMapping("/all")
-  public Pagination<PostPreviewDto> getAllPosts(@RequestParam(defaultValue = "1") int page) {
+  public Pagination<PostPreviewDto> getPaginatedPosts(@RequestParam(defaultValue = "1") int page) {
     return boardService.getPaginatedPosts(page);
   }
 
