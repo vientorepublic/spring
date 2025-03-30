@@ -2,33 +2,21 @@ package com.dkim.springproj.springproj.main.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class PostBodyDto {
   @NotNull
   @NotBlank
   private String title;
+
   @NotNull
   @NotBlank
   private String content;
-
-  public PostBodyDto(String title, String content) {
-    this.title = title;
-    this.content = content;
-  }
-
-  public String getTitle() {
-    return title;
-  }
-
-  public void setTitle(String title) {
-    this.title = title;
-  }
-
-  public String getContent() {
-    return content;
-  }
-
-  public void setContent(String content) {
-    this.content = content;
-  }
 }

@@ -1,18 +1,15 @@
 package com.dkim.springproj.springproj.main.dto;
 
-public class AuthResponseDto extends MessageDto {
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+public class AuthResponseDto {
+  private String message;
   private String token;
-
-  public AuthResponseDto(String message, String token) {
-    super(message);
-    this.token = token;
-  }
-
-  public String getToken() {
-    return this.token;
-  }
-
-  public void setToken(String token) {
-    this.token = token;
-  }
 }

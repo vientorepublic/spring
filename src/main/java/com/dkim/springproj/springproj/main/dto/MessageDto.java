@@ -1,17 +1,14 @@
 package com.dkim.springproj.springproj.main.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class MessageDto {
   private String message;
-
-  public MessageDto(String message) {
-    this.message = message;
-  }
-
-  public String getMessage() {
-    return this.message;
-  }
-
-  public void setMessage(String message) {
-    this.message = message;
-  }
 }

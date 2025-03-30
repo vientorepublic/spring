@@ -102,11 +102,11 @@ public class BoardService {
     }
   }
 
-  private Post mapToPost(PostBodyDto postBodyDto, User user) {
+  private Post mapToPost(PostBodyDto body, User user) {
     Post post = new Post();
-    post.setTitle(postBodyDto.getTitle());
-    post.setPreview(utility.convertPreview(postBodyDto.getContent()));
-    post.setContent(postBodyDto.getContent());
+    post.setTitle(body.getTitle());
+    post.setPreview(utility.convertPreview(body.getContent()));
+    post.setContent(body.getContent());
     post.setUser(user);
     return post;
   }
